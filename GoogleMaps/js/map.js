@@ -1,6 +1,12 @@
+
+(function(){
 window.onload = function() {
+
 	var mapDiv = document.getElementById('map');
-	var latlng = new google.maps.LatLng(51.48878, -0.178099);
+	// var latlng = new google.maps.LatLng(51.48878, -0.178099);	// London
+	var latlng = new google.maps.LatLng(41.904321,-87.636566);		// Chicago
+	
+	var toggleState = 1;	// to keep track of state of toggle switch
 
 	// Creating a MapOptions object with the required properties
 	var options = {
@@ -10,11 +16,39 @@ window.onload = function() {
 	};
 
 	// Creating the map
-	var map = new google.maps.Map(mapDiv, options);
+	var ourMap = new google.maps.Map(mapDiv, options);
+	
+	// setting KML URL and options for the layer
+	var kmlUrl = 'http://gmaps-samples.googlecode.com/svn/trunk/ggeoxml/cta.kml';
+	var kmlOptions = {
+		map: ourMap,
+		preserveViewport: true
+	};
 
-	var marker = new google.maps.Marker({
-		position: new google.maps.LatLng(51.49978, -0.178099),
-		map: map
-	});
+	// Create the KML layer on our map
+	var kmlLayer = new google.maps.KmlLayer(kmlUrl, kmlOptions);
 
+
+	
+	// Function to toggle the KML button
+	document.getElementById('test').onclick = function() {
+	
+		if (toggleState == 1) {
+			// remove KML layer from the map
+			kmlLayer.setMap(null);
+			toggleState = 0;
+		
+			alert('KML layer now turned off');
+		
+		
+		} else {
+			// add KML layer to our map
+			kmlLayer.setMap(ourMap);
+			toggleState = 1;
+		
+			alert('KML layer now turned ON!');
+		}
+	}
 }
+
+})();
